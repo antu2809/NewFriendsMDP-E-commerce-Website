@@ -1,6 +1,6 @@
 # New Friends MDP E-commerce Website
 
-Welcome to the New Friends MDP E-commerce website, a Django-based project with Python, React, JavaScript, HTML, and CSS.
+ New Friends MDP E-commerce website, a Django-based project with Python, React, JavaScript, HTML, and CSS.
 
 ## Features
 - Browse and purchase products.
