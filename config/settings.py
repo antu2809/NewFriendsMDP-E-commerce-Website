@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-from ..settings_local import SECRET_KEY
+from settings_local import SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -34,7 +34,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.example.com'  # Reemplaza 'smtp.example.com' con la dirección del servidor de correo saliente de tu proveedor de correo
 EMAIL_PORT = 587  # Reemplaza 587 con el puerto correspondiente de tu proveedor de correo
 EMAIL_HOST_USER = 'contact@newfriendsmdp.com'  # Dirección de correo electrónico de contacto
-from ..settings_local import EMAIL_HOST_PASSWORD
+from settings_local import EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = True  # Utiliza TLS para una conexión segura
 
 # URL de inicio de sesión
@@ -65,7 +65,7 @@ AXES_LOCK_OUT_AT_FAILURE = True
 AXES_COOLOFF_TIME = 1  # Bloquear durante 1 minuto después de superar el límite de intentos
 
 try:
-    from ..settings_local import *
+    from settings_local import *
 except ImportError:
     pass
 
@@ -160,5 +160,5 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-from ..settings_local import MERCADOPAGO_ACCESS_TOKEN
+from settings_local import MERCADOPAGO_ACCESS_TOKEN
 
