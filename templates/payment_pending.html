@@ -1,0 +1,13 @@
+
+<!-- payment_pending.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Pago Pendiente</h1>
+  <p>El pago se encuentra pendiente de procesamiento.</p>
+  <p>Detalles del pago:</p>
+  <ul>
+    <li>ID del Pago: {{ payment_id }}</li>
+    <li>Estado: {{ status }}</li>
+  </ul>
+{% endblock %}

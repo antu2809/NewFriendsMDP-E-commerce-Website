@@ -1,0 +1,12 @@
+<!-- payment_success.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Pago Exitoso</h1>
+  <p>El pago se ha procesado correctamente.</p>
+  <p>Detalles del pago:</p>
+  <ul>
+    <li>ID del Pago: {{ payment_id }}</li>
+    <li>Estado: {{ status }}</li>
+  </ul>
+{% endblock %}

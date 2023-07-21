@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Compra de Producto</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+    
+        <h2>Métodos de Pago:</h2>
+        {% for payment_method in payment_methods %}
+            <a href="#" onclick="processPayment('{{ payment_method.payment_method_id }}')">
+                {{ payment_method.name }}
+            </a>
+            <br>
+        {% endfor %}
+        <a href="{% url 'payment_view' product_id=product_id %}" class="btn btn-primary">Realizar Pago</a>
+    </form>
+
+    <script src="/static/components/payment.js"></script>
+    
+{% endblock %}

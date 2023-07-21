@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Friends MDP</title>
+    <!-- Incluir enlaces a archivos CSS, bibliotecas JavaScript, etc. -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.4.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.4.0/js/bootstrap.min.js"></script>
+    <script src="https://www.mercadopago.com/v2/security.js" view="home"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: rgb(254, 248, 238);
+        }
+
+        .header-title {
+            text-align: center; /* Alinear el texto al centro */
+            margin-top: 0;
+            font-size: 20px;
+            color: #333333;
+            margin-bottom: 0;
+            margin-left: 20px;
+        }
+
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgb(255, 255, 255);
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin-left: 10px;
+            white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
+            overflow: hidden; /* Ocultar cualquier exceso de texto */
+            text-overflow: ellipsis; /* Mostrar puntos suspensivos (...) cuando el texto excede el ancho disponible */
+        }        
+
+        .nav-link {
+            color: #333333;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff8c00;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .product-list-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .product-card {
+            width: 300px;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .product-card img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .product-card h3 {
+            margin-top: 0;
+        }
+        
+        .product-card p {
+            margin-bottom: 10px;
+        }
+
+        /* Estilos adicionales */
+        .header-bar {
+            background-color: #ffffff;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 20px;
+            text-decoration: none;
+            color: #333333;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-left: 10px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333333;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff8c00;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        /* Estilos para el catálogo de productos */
+        .product-list-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            width: 300px;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-card img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .product-card h3 {
+            margin-top: 0;
+        }
+        
+        .product-card p {
+            margin-bottom: 10px;
+        }
+        .catalogo {
+            text-align: center;
+          }
+    </style>
+</head>
+<body>
+    <!-- Barra de encabezado -->
+    <div class="header-bar">
+        <a class="navbar-brand" href="/">New Friends MDP</a>
+        <div class="header-title">
+            <h2 class="animate__animated animate__fadeInDown">New Friends MDP</h2>
+        </div>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="product_list">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact">Contacto</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        {% block content %}
+        <p class="catalogo">Catálogo</p>
+           <div class="product-list-container">
+            {% for product in products %}
+                <div class="product-card" key="{{ product.id }}">
+                    <h3>{{ product.name }}</h3>
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200" height="150">
+                    <p>{{ product.description }}</p>
+                    <p>${{ product.price }}</p>
+                    <p>Stock: {{ product.stock }}</p>
+                    <form method="post" action="{% url 'purchase_product' product.id %}">
+                        {% csrf_token %}
+                        <a href="#" onclick="Mercadopago.createToken()">
+                            Hasta 12 cuotas sin tarjeta
+                        </a>
+                        <input type="submit" value="Comprar">
+                    </form>
+                </div>
+            {% endfor %}
+           </div>
+       {% endblock %}
+    </div>
+
+    <!-- Aquí puedes incluir scripts JavaScript adicionales si es necesario -->
+
+    <!-- Pie de página -->
+    <footer>
+        <!-- Contenido del pie de página -->
+    </footer>
+</body>
+</html>

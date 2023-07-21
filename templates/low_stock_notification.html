@@ -1,0 +1,19 @@
+<!-- low_stock_notification.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Low Stock Notification</h1>
+  
+  {% if products %}
+    <h2>Low Stock Products:</h2>
+    <ul>
+      {% for product in products %}
+        <li>{{ product.name }} - Stock: {{ product.stock }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No products with low stock.</p>
+  {% endif %}
+  
+{% endblock %}

@@ -1,0 +1,24 @@
+# Ignorar archivos y directorios generados por Django
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignorar archivos de configuración local
+settings_local.py
+
+# Ignorar archivos de base de datos
+db.sqlite3
+
+# Ignorar archivos y directorios generados por IDEs o editores de código
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.pyc
+*.pyo
+*.pyd
+*.swp
+
+# Ignorar archivos y directorios específicos de tu proyecto
+/media/
+/static/

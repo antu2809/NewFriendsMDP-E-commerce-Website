@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Catalogo</h2>
+    <div class="product-list-container">
+        {% for product in products %}
+            <div key="{{ product.id }}">
+                <h3>{{ product.name }}</h3>
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200" height="150">
+                <p>{{ product.description }}</p>
+                <p>${{ product.price }}</p>
+                <p>Stock: {{ product.stock }}</p>
+                <form method="post" action="{% url 'payment_view' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit">Comprar</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

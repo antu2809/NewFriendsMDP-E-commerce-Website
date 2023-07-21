@@ -1,0 +1,185 @@
+<!-- payment.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Payment</h2>
+  <form method="post" class="my-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-group">
+      <label for="payment_method">Payment Method:</label>
+      <select name="payment_method" id="payment_method" class="form-control">
+        <option value="credit_card">Credit Card</option>
+        <option value="debit_card">Debit Card</option>
+        <option value="cash">Cash</option>
+      </select>
+    </div>
+    <!-- Resto del código... -->
+    <div id="credit_card_fields" class="form-group" style="display: none;">
+      <label for="credit_card_number">Credit Card Number:</label>
+      <input type="text" name="credit_card_number" id="credit_card_number" required>
+    </div>
+    <!-- Resto del código... -->     
+    <div id="credit_card_expiration_fields" class="form-group" style="display: none;">
+      <label for="credit_card_expiration_date">Credit Card Expiration Date:</label>
+      <input type="text" name="credit_card_expiration_date" id="credit_card_expiration_date" required>
+    </div>
+    <!-- Resto del código... -->
+    <div id="credit_card_cvv_fields" class="form-group" style="display: none;">
+      <label for="credit_card_cvv">Credit Card CVV:</label>
+      <input type="text" name="credit_card_cvv" id="credit_card_cvv" required>
+   </div>
+   <!-- Resto del código... -->
+   <div id="debit_card_fields" class="form-group" style="display: none;">
+      <label for="debit_card_number">Debit Card Number:</label>
+      <input type="text" name="debit_card_number" id="debit_card_number" required>
+   </div>
+   <!-- Resto del código... -->
+   <div id="debit_card_expiration_fields" class="form-group" style="display: none;">
+      <label for="debit_card_expiration_date">Debit Card Expiration Date:</label>
+      <input type="text" name="debit_card_expiration_date" id="debit_card_expiration_date" required>
+   </div>
+   <!-- Resto del código... -->
+   <div id="debit_card_cvv_fields" class="form-group" style="display: none;">
+      <label for="debit_card_cvv">Debit Card CVV:</label>
+      <input type="text" name="debit_card_cvv" id="debit_card_cvv" required>
+   </div>
+   <!-- Resto del código... -->  
+    <div id="cash_payment_fields" class="form-group" style="display: none;">
+      <h4>Detalle del pago</h4>
+      <p>Pagás ${{ product.price }} en efectivo</p>
+      <input type="hidden" name="payment_method" value="cash">
+  
+      <label for="cash_payment_reference">Número de Referencia:</label> 
+      <input type="text" name="reference_number" id="cash_payment_reference" class="form-control" required>
+      <button class="btn btn-link" onclick="showPaymentForm()">Modificar medio de pago</button>
+  
+      <h4>Datos para tu factura</h4>
+      <p>{{ user.full_name }} - DNI {{ user.dni }}</p>
+      <button class="btn btn-link" onclick="showUserDataForm()">Modificar</button>
+  
+      <h4>{{ product.name }}</h4>
+      <p>Cantidad: 1</p>
+      <p>Producto</p>
+      <p>${{ product.price }}</p>
+      <p>Envío</p>
+      <p>Gratis</p>
+      <p>Pagás</p>
+      <p>${{ product.price }}</p>
+  
+      <p>Conocé nuestros avisos legales</p>
+  
+      <button type="submit" class="btn btn-primary">Confirmar compra</button>
+  </div>
+  
+    <input type="submit" value="Submit Payment" class="btn btn-primary">
+  </form>
+
+  <script>
+    const paymentMethodSelect = document.getElementById('payment_method');
+    const creditCardFields = document.getElementById('credit_card_fields');
+    const creditCardExpirationFields = document.getElementById('credit_card_expiration_fields');
+    const creditCardCvvFields = document.getElementById('credit_card_cvv_fields');
+    const debitCardFields = document.getElementById('debit_card_fields');
+    const debitCardExpirationFields = document.getElementById('debit_card_expiration_fields');
+    const debitCardCvvFields = document.getElementById('debit_card_cvv_fields');
+    const cashPaymentFields = document.getElementById('cash_payment_fields');
+
+    paymentMethodSelect.addEventListener('change', function () {
+      const selectedOption = paymentMethodSelect.value;
+      if (selectedOption === 'credit_card') {
+        creditCardFields.style.display = 'block';
+        creditCardExpirationFields.style.display = 'block';
+        creditCardCvvFields.style.display = 'block';
+        debitCardFields.style.display = 'none';
+        debitCardExpirationFields.style.display = 'none';
+        debitCardCvvFields.style.display = 'none';
+        cashPaymentFields.style.display = 'none';
+      } else if (selectedOption === 'debit_card') {
+        creditCardFields.style.display = 'none';
+        creditCardExpirationFields.style.display = 'none';
+        creditCardCvvFields.style.display = 'none';
+        debitCardFields.style.display = 'block';
+        debitCardExpirationFields.style.display = 'block';
+        debitCardCvvFields.style.display = 'block';
+        cashPaymentFields.style.display = 'none';
+      } else if (selectedOption === 'cash') {
+        creditCardFields.style.display = 'none';
+        creditCardExpirationFields.style.display = 'none';
+        creditCardCvvFields.style.display = 'none';
+        debitCardFields.style.display = 'none';
+        debitCardExpirationFields.style.display = 'none';
+        debitCardCvvFields.style.display = 'none';
+        cashPaymentFields.style.display = 'block';
+      } else {
+        creditCardFields.style.display = 'none';
+        creditCardExpirationFields.style.display = 'none';
+        creditCardCvvFields.style.display = 'none';
+        debitCardFields.style.display = 'none';
+        debitCardExpirationFields.style.display = 'none';
+        debitCardCvvFields.style.display = 'none';
+        cashPaymentFields.style.display = 'none';
+      }
+    });
+
+    function showPaymentForm() {
+      const paymentMethodSelect = document.getElementById('payment_method');
+      const selectedOption = paymentMethodSelect.value;
+    
+      if (selectedOption === 'credit_card') {
+        // Lógica para mostrar/modificar el formulario de pago con tarjeta de crédito
+        const creditCardFields = document.getElementById('credit_card_fields');
+        creditCardFields.style.display = 'block';
+      } else if (selectedOption === 'debit_card') {
+        // Lógica para mostrar/modificar el formulario de pago con tarjeta de débito
+        const debitCardFields = document.getElementById('debit_card_fields');
+        debitCardFields.style.display = 'block';
+      } else if (selectedOption === 'cash') {
+        // Lógica para mostrar/modificar el formulario de pago en efectivo
+        const cashPaymentFields = document.getElementById('cash_payment_fields');
+        cashPaymentFields.style.display = 'block';
+      } else {
+        // Si no se selecciona ningún método de pago, no se muestra ningún formulario adicional
+      }
+    }
+
+    function showUserDataForm() {
+      // Lógica para mostrar/modificar el formulario de datos del usuario para la factura
+      // Puedes implementar tus propias acciones según los requisitos del sitio web
+      // Por ejemplo, mostrar un modal con un formulario para editar los datos del usuario
+      // o redirigir a una página separada para ingresar los datos de facturación.
+      // Aquí solo se muestra un mensaje de ejemplo:
+      alert("Aquí puedes mostrar el formulario para editar los datos del usuario");
+    }
+    
+    function confirmPurchase() {
+      // Obtener el número de referencia ingresado por el usuario
+      const cashPaymentReference = document.getElementById('cash_payment_reference').value;
+      
+      // Lógica para confirmar la compra y realizar acciones adicionales si es necesario
+      // Aquí solo se muestra un mensaje de ejemplo:
+      alert("¡Compra confirmada! Número de referencia: " + cashPaymentReference);
+    
+      // Si deseas realizar acciones adicionales, como enviar los datos de la compra al servidor,
+      // puedes utilizar AJAX para enviar una solicitud al servidor y procesar la respuesta.
+      // Aquí hay un ejemplo básico utilizando la biblioteca jQuery:
+      
+      $.ajax({
+        url: '/procesar_compra',
+        method: 'POST',
+        data: {
+          cash_payment_reference: cashPaymentReference,
+          // Aquí puedes enviar los datos relevantes de la compra, como el método de pago, el producto, etc.
+        },
+        success: function(response) {
+          // Lógica para manejar la respuesta del servidor en caso de éxito
+          alert("¡Compra procesada correctamente!");
+        },
+        error: function(error) {
+          // Lógica para manejar errores en caso de que la compra no se pueda procesar
+          alert("Ocurrió un error al procesar la compra. Por favor, inténtalo nuevamente.");
+        }
+      });
+    }
+  </script>
+{% endblock %}

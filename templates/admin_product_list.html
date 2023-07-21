@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Administración de productos</h1>
+    <p>Esta es la página de administración de productos.</p>
+    <div>
+        {% for product in products %}
+          <div key="{{ product.id }}">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p>${{ product.price }}</p>
+            <p>Stock: {{ product.stock }}</p>
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200" height="150">
+            <div class="options">
+              <a href="{% url 'update_product' product.id %}" class="edit-btn">Editar</a>
+              <a href="{% url 'delete_product' product.id %}" class="delete-btn">Eliminar</a>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+{% endblock %}
