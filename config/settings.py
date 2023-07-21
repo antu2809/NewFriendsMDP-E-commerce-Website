@@ -60,9 +60,9 @@ INSTALLED_APPS = [
 ]
 
 AXES_LOGIN_FAILURE_LIMIT = 5
-AXES_USE_USER_AGENT = True
 AXES_LOCK_OUT_AT_FAILURE = True
 AXES_COOLOFF_TIME = 1  # Bloquear durante 1 minuto después de superar el límite de intentos
+AXES_IGNORE_USER_AGENTS = ['django-admin']
 
 try:
     from settings_local import *
@@ -79,11 +79,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'axes.backends.AxesStandaloneBackend',
 ]
 
 
@@ -161,4 +163,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 from settings_local import MERCADOPAGO_ACCESS_TOKEN
+
+
 

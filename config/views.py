@@ -16,6 +16,7 @@ from django.http import request
 import mercadopago
 from mercadopago.resources import PaymentMethods
 import random
+from django.views.decorators.http import require_POST
 
 
 def base_view(request):
@@ -71,6 +72,7 @@ def add_product(request):
     payment_form = PaymentForm()  # Formulario para capturar información de pago
     return render(request, 'add_product.html', {'form': form, 'payment_form': payment_form})
 
+@require_POST
 def update_product(request, product_id):
     if not request.user.is_superuser:
         return redirect('product_list')
@@ -87,6 +89,7 @@ def update_product(request, product_id):
 
     return render(request, 'update_product.html', {'form': form})
 
+@require_POST
 def delete_product(request, product_id):
     if not request.user.is_superuser:
         return redirect('product_list')
