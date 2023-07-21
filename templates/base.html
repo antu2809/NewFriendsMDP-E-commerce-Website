@@ -206,6 +206,16 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="product_list">Productos</a></li>
             <li class="nav-item"><a class="nav-link" href="contact">Contacto</a></li>
+            <!-- Agregar acceso de inicio de sesión, cierre de sesión y registro -->
+            {% if user.is_authenticated %}
+              <!-- Usuario autenticado: Mostrar enlace de cierre de sesión -->
+              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
+            {% else %}
+            <!-- Usuario no autenticado: Mostrar enlace de inicio de sesión y registro -->
+              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Registrarse</a></li>
+            {% endif %}
+            <!-- Fin de acceso de inicio de sesión, cierre de sesión y registro -->
         </ul>
     </div>
 
