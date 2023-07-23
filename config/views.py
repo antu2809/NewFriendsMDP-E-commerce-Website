@@ -229,10 +229,9 @@ def purchase_product(request, product_id):
 
 
 def create_preference(product):
-    # Configura tu clave de acceso de Mercado Pago
     mp = mercadopago.MP("TEST-1320068320570405-070920-5ac5bb2c688585001638eec597a2243c-398042112")
 
-    # Crea el objeto de preferencia de pago en Mercado Pago
+    # objeto de preferencia de pago en Mercado Pago
     preference_data = {
         "items": [
             {
@@ -274,15 +273,15 @@ def payment_view(request, product_id):
                         credit_card.reference_number = reference_number
                         credit_card.save()
 
-                    # Crea el objeto de preferencia de pago en Mercado Pago
+                    # objeto de preferencia de pago en Mercado Pago
                     init_point = create_preference(product)
 
-                    # Actualiza el método de pago con el ID de pago
+                    # Actualizacion el método de pago con el ID de pago
                     payment_method = form.cleaned_data['payment_method']
                     payment_method.order = Order.objects.create(user=request.user)
                     payment_method.save()
 
-                    # Redirige al usuario a la página de pago de Mercado Pago
+                    # Redireccion al usuario a la página de pago de Mercado Pago
                     return redirect(init_point)
 
                 except Exception as e:
@@ -297,7 +296,7 @@ def payment_view(request, product_id):
     products = Product.objects.all()
     payment_methods = PaymentMethod.objects.all()
     
-    # Agregar opciones de pago en efectivo al contexto payment_methods
+    # opciones de pago en efectivo al contexto payment_methods
     payment_methods = payment_methods.exclude(name__in=['rapipago', 'pagofacil']).values('name', 'id')
     payment_methods = list(payment_methods)
     payment_methods.append({'name': 'Rapipago', 'id': 'rapipago'})
@@ -319,14 +318,14 @@ def process_purchase(request):
         # Obtener los datos de la compra enviados desde la solicitud AJAX
         cash_payment_reference = request.POST.get('cash_payment_reference')
 
-        # Aquí puedes realizar las acciones adicionales que sean necesarias, como actualizar el estado del pedido,
+        # acciones adicionales que sean necesarias, como actualizar el estado del pedido,
         # enviar notificaciones, generar comprobantes, etc.
-        # Por ejemplo, si tienes un modelo llamado "Order" con una referencia única, podrías hacer algo como:
+        # ejemplo: mediante modelo llamado "Order" con una referencia única
         # order = Order.objects.get(reference_number=cash_payment_reference)
         # order.status = 'completed'
         # order.save()
 
-        # En este ejemplo, simplemente devolvemos una respuesta JSON indicando que la compra fue procesada correctamente.
+        # respuesta JSON indicando que la compra fue procesada correctamente.
         response_data = {'status': 'success', 'message': 'Compra procesada correctamente.'}
         return JsonResponse(response_data)
 
