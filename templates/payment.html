@@ -3,7 +3,10 @@
 
 {% block content %}
   <h2>Payment</h2>
-  <form method="post" class="my-4">
+  <form method="post" class="my-4" id="payment_form" onsubmit="confirmPurchase();">
+    <!-- Resto del código del formulario... -->
+  </form>
+  
     {% csrf_token %}
     {{ form.as_p }}
     <div class="form-group">
@@ -69,7 +72,8 @@
   
       <p>Conocé nuestros avisos legales</p>
   
-      <button type="submit" class="btn btn-primary">Confirmar compra</button>
+      <button type="button" class="btn btn-primary" onclick="confirmPurchase();">Confirmar compra</button>
+
   </div>
   
     <input type="submit" value="Submit Payment" class="btn btn-primary">

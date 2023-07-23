@@ -1,6 +1,5 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product, PaymentMethod, CreditCard, Bank, Order
-from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
@@ -17,6 +16,8 @@ import mercadopago
 from mercadopago.resources import PaymentMethods
 import random
 from django.views.decorators.http import require_POST
+from .utils import generate_reference_number
+from django.http import JsonResponse
 
 
 def base_view(request):
@@ -149,7 +150,7 @@ def purchase_history(request):
 
 # Vistas y lógica necesaria para el pago
 def get_payment_methods():
-    mp = mercadopago.SDK("TEST-1320068320570405-070920-5ac5bb2c688585001638eec597a2243c-398042112")
+    mp = mercadopago.SDK("from settings_local import MERCADOPAGO_ACCESS_TOKEN")
     payment_methods = mp.get("/v1/payment_methods") 
     
     # Filtra los métodos de pago disponibles según tus necesidades
@@ -251,9 +252,7 @@ def create_preference(product):
 
     return preference['response']['init_point']
 
-def generate_reference_number():
-    # Genera un número aleatorio de 8 dígitos como número de referencia
-    return str(random.randint(10000000, 99999999))
+
 
 def payment_view(request, product_id):
     if request.method == 'POST':
@@ -313,7 +312,26 @@ def payment_view(request, product_id):
 
     return render(request, 'payment.html', context)
 
+from django.http import JsonResponse
 
+def process_purchase(request):
+    if request.method == 'POST':
+        # Obtener los datos de la compra enviados desde la solicitud AJAX
+        cash_payment_reference = request.POST.get('cash_payment_reference')
+
+        # Aquí puedes realizar las acciones adicionales que sean necesarias, como actualizar el estado del pedido,
+        # enviar notificaciones, generar comprobantes, etc.
+        # Por ejemplo, si tienes un modelo llamado "Order" con una referencia única, podrías hacer algo como:
+        # order = Order.objects.get(reference_number=cash_payment_reference)
+        # order.status = 'completed'
+        # order.save()
+
+        # En este ejemplo, simplemente devolvemos una respuesta JSON indicando que la compra fue procesada correctamente.
+        response_data = {'status': 'success', 'message': 'Compra procesada correctamente.'}
+        return JsonResponse(response_data)
+
+    # Si la solicitud no es POST, devolvemos un error 405 (Método no permitido)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 def payment_success(request):
     if request.method == 'GET':
@@ -369,7 +387,6 @@ def payment_failure(request):
         order.save()
 
         return render(request, 'payment_failure.html', {'payment_id': payment_id, 'status': status})
-
 
 # Otras vistas y lógica necesaria para el pago
 
