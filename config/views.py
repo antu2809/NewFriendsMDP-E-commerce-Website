@@ -1,3 +1,5 @@
+import mercadopago
+import uuid
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product, PaymentMethod, CreditCard, Bank, Order
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -12,13 +14,10 @@ from django_otp import match_token
 from django_otp.decorators import otp_required
 from django.urls import reverse
 from django.http import request
-import mercadopago
 from mercadopago.resources import PaymentMethods
-import random
 from django.views.decorators.http import require_POST
-from .utils import generate_reference_number
 from django.http import JsonResponse
-
+from .utils import match_token, create_preference
 
 def base_view(request):
     products = Product.objects.all()
@@ -159,7 +158,7 @@ def get_payment_methods():
 def purchase_product(request, product_id):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
-        form.product_id = product_id #asignar el campo product_id al formulario para mantener el contexto al procesar el pago
+        form.product_id = product_id
         if form.is_valid():
             credit_card = form.save(commit=False)
             otp_code = form.cleaned_data['otp_code']
@@ -169,7 +168,7 @@ def purchase_product(request, product_id):
                 credit_card.save()
 
                 try:
-                    mp = mercadopago.SDK("TEST-1320068320570405-070920-5ac5bb2c688585001638eec597a2243c-398042112")
+                    mp = mercadopago.SDK("from settings_local import MERCADOPAGO_ACCESS_TOKEN")
 
                     product = get_object_or_404(Product, id=product_id)
 
@@ -182,6 +181,7 @@ def purchase_product(request, product_id):
                                 'unit_price': str(product.price)
                             }
                         ],
+                        'external_reference': str(uuid.uuid4()),  # Generar un número de referencia único
                         'back_urls': {
                             'success': request.build_absolute_uri(reverse('payment_success')),
                             'pending': request.build_absolute_uri(reverse('payment_pending')),
@@ -190,20 +190,15 @@ def purchase_product(request, product_id):
                     }
                     preference = mp.create_preference(preference_data)
 
+                    # Redireccionamos al usuario a la página de pago de Mercado Pago
                     return redirect(preference['response']['init_point'])
 
                 except Exception as e:
                     form.add_error(None, 'Error en el procesamiento del pago')
-                    print("ERROR:",e.__str__())
+                    print("ERROR:", e.__str__())
 
             else:
                 form.add_error('otp_code', 'Invalid OTP code')
-            
-            # Generar el número de referencia único para las transacciones en efectivo
-            if form.cleaned_data['payment_method'] in ['rapipago', 'pagofacil']:
-                reference_number = generate_reference_number()
-                credit_card.reference_number = reference_number
-                credit_card.save()
     else:
         form = PaymentForm()
 
@@ -228,31 +223,6 @@ def purchase_product(request, product_id):
     return render(request, 'purchase_product.html', context)
 
 
-def create_preference(product):
-    mp = mercadopago.MP("TEST-1320068320570405-070920-5ac5bb2c688585001638eec597a2243c-398042112")
-
-    # objeto de preferencia de pago en Mercado Pago
-    preference_data = {
-        "items": [
-            {
-                "title": product.name,
-                "quantity": 1,
-                "currency_id": "ARS",
-                "unit_price": str(product.price)
-            }
-        ],
-        "back_urls": {
-            "success": request.build_absolute_uri(reverse('payment_success')),
-            "pending": request.build_absolute_uri(reverse('payment_pending')),
-            "failure": request.build_absolute_uri(reverse('payment_failure'))
-        }
-    }
-    preference = mp.create_preference(preference_data)
-
-    return preference['response']['init_point']
-
-
-
 def payment_view(request, product_id):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
@@ -266,12 +236,6 @@ def payment_view(request, product_id):
 
                 try:
                     product = get_object_or_404(Product, id=product_id)
-                    
-                    # Generar el número de referencia único para las transacciones en efectivo
-                    if form.cleaned_data['payment_method'] in ['rapipago', 'pagofacil']:
-                        reference_number = generate_reference_number()
-                        credit_card.reference_number = reference_number
-                        credit_card.save()
 
                     # objeto de preferencia de pago en Mercado Pago
                     init_point = create_preference(product)
@@ -301,12 +265,15 @@ def payment_view(request, product_id):
     payment_methods = list(payment_methods)
     payment_methods.append({'name': 'Rapipago', 'id': 'rapipago'})
     payment_methods.append({'name': 'Pago Fácil', 'id': 'pagofacil'})
-
+    
+    # Obtener el número de referencia de la sesión
+    reference_number = request.session.get('reference_number')
 
     context = {
         'products': products,
         'payment_form': form,
         'payment_methods': payment_methods,
+        'reference_number': reference_number,
     }
 
     return render(request, 'payment.html', context)

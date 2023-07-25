@@ -1,14 +1,23 @@
 # utils.py
 
-import random
 import mercadopago
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from .models import Product, Order
+from pyotp import TOTP
 
-def generate_reference_number():
-    # Genera un número aleatorio de 8 dígitos como número de referencia
-    return str(random.randint(10000000, 99999999))
+def match_token(otp_secret, otp_code):
+    try:
+        # Crear un objeto TOTP con el secreto del token
+        totp = TOTP(otp_secret)
+
+        # Verificar si el código OTP proporcionado coincide con el código generado
+        return totp.verify(otp_code)
+
+    except Exception as e:
+        # Si ocurre algún error durante la verificación del código OTP, se considera que no coincide
+        return False
+
 
 def create_preference(product_id, request):
     # Configura tu clave de acceso de Mercado Pago (Reemplaza "TEST-ACCESS-TOKEN" por tu token real)
@@ -65,3 +74,5 @@ def process_failed_payment(payment_id):
     # Actualizar el estado del pedido
     order.status = 'failed'
     order.save()
+
+

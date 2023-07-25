@@ -17,66 +17,62 @@
         <option value="cash">Cash</option>
       </select>
     </div>
-    <!-- Resto del código... -->
+    <!-- Credit card ... -->
     <div id="credit_card_fields" class="form-group" style="display: none;">
       <label for="credit_card_number">Credit Card Number:</label>
       <input type="text" name="credit_card_number" id="credit_card_number" required>
     </div>
-    <!-- Resto del código... -->     
+       
     <div id="credit_card_expiration_fields" class="form-group" style="display: none;">
       <label for="credit_card_expiration_date">Credit Card Expiration Date:</label>
       <input type="text" name="credit_card_expiration_date" id="credit_card_expiration_date" required>
     </div>
-    <!-- Resto del código... -->
+    
     <div id="credit_card_cvv_fields" class="form-group" style="display: none;">
       <label for="credit_card_cvv">Credit Card CVV:</label>
       <input type="text" name="credit_card_cvv" id="credit_card_cvv" required>
    </div>
-   <!-- Resto del código... -->
+   <!-- Debit card... -->
    <div id="debit_card_fields" class="form-group" style="display: none;">
       <label for="debit_card_number">Debit Card Number:</label>
       <input type="text" name="debit_card_number" id="debit_card_number" required>
    </div>
-   <!-- Resto del código... -->
+ 
    <div id="debit_card_expiration_fields" class="form-group" style="display: none;">
       <label for="debit_card_expiration_date">Debit Card Expiration Date:</label>
       <input type="text" name="debit_card_expiration_date" id="debit_card_expiration_date" required>
    </div>
-   <!-- Resto del código... -->
+   
    <div id="debit_card_cvv_fields" class="form-group" style="display: none;">
       <label for="debit_card_cvv">Debit Card CVV:</label>
       <input type="text" name="debit_card_cvv" id="debit_card_cvv" required>
    </div>
-   <!-- Resto del código... -->  
-    <div id="cash_payment_fields" class="form-group" style="display: none;">
-      <h4>Detalle del pago</h4>
-      <p>Pagás ${{ product.price }} en efectivo</p>
-      <input type="hidden" name="payment_method" value="cash">
-  
-      <label for="cash_payment_reference">Número de Referencia:</label> 
-      <input type="text" name="reference_number" id="cash_payment_reference" class="form-control" required>
-      <button class="btn btn-link" onclick="showPaymentForm()">Modificar medio de pago</button>
-  
-      <h4>Datos para tu factura</h4>
-      <p>{{ user.full_name }} - DNI {{ user.dni }}</p>
-      <button class="btn btn-link" onclick="showUserDataForm()">Modificar</button>
-  
-      <h4>{{ product.name }}</h4>
-      <p>Cantidad: 1</p>
-      <p>Producto</p>
-      <p>${{ product.price }}</p>
-      <p>Envío</p>
-      <p>Gratis</p>
-      <p>Pagás</p>
-      <p>${{ product.price }}</p>
-  
-      <p>Conocé nuestros avisos legales</p>
-  
-      <button type="button" class="btn btn-primary" onclick="confirmPurchase();">Confirmar compra</button>
+   <!-- CASH... -->  
+   <div id="cash_payment_fields" class="form-group" style="display: none;">
+    <!-- Detalle del pago en efectivo -->
+    <h4>Detalle del pago</h4>
+    <p>Pagás ${{ product.price }} en efectivo</p>
+    <input type="hidden" name="payment_method" value="cash">
 
+    <!-- Datos para la factura -->
+    <h4>Datos para tu factura</h4>
+    <p>{{ user.full_name }} - DNI {{ user.dni }}</p>
+    <button class="btn btn-link" onclick="showUserDataForm()">Modificar</button>
+
+    <!-- Detalles del producto y total -->
+    <h4>{{ product.name }}</h4>
+    <p>Cantidad: 1</p>
+    <p>Producto</p>
+    <p>${{ product.price }}</p>
+    <p>Envío</p>
+    <p>Gratis</p>
+    <p>Pagás</p>
+    <p>${{ product.price }}</p>
+
+    <p>Conocé nuestros avisos legales</p>
+
+    <button type="button" class="btn btn-primary" onclick="confirmPurchase();">Confirmar compra</button>
   </div>
-  
-    <input type="submit" value="Submit Payment" class="btn btn-primary">
   </form>
 
   <script>
@@ -149,40 +145,36 @@
 
     function showUserDataForm() {
       // Lógica para mostrar/modificar el formulario de datos del usuario para la factura
-      // Puedes implementar tus propias acciones según los requisitos del sitio web
-      // Por ejemplo, mostrar un modal con un formulario para editar los datos del usuario
+      // Proximas actualizaciones: un modal con un formulario para editar los datos del usuario
       // o redirigir a una página separada para ingresar los datos de facturación.
       // Aquí solo se muestra un mensaje de ejemplo:
-      alert("Aquí puedes mostrar el formulario para editar los datos del usuario");
+      alert("formulario para editar los datos del usuario");
     }
     
     function confirmPurchase() {
-      // Obtener el número de referencia ingresado por el usuario
-      const cashPaymentReference = document.getElementById('cash_payment_reference').value;
-      
       // Lógica para confirmar la compra y realizar acciones adicionales si es necesario
-      // Aquí solo se muestra un mensaje de ejemplo:
-      alert("¡Compra confirmada! Número de referencia: " + cashPaymentReference);
-    
-      // Si deseas realizar acciones adicionales, como enviar los datos de la compra al servidor,
-      // puedes utilizar AJAX para enviar una solicitud al servidor y procesar la respuesta.
-      // Aquí hay un ejemplo básico utilizando la biblioteca jQuery:
-      
+      const cashPaymentReference = "{{ reference_number }}";
+  
+      // Mostrar el número de referencia para que el cliente lo dicte en el punto de pago en efectivo
+      alert("Número de referencia para el pago en efectivo: " + cashPaymentReference);
+  
+      // Proxima actualizacion: utilizar AJAX para enviar una solicitud al servidor y procesar la respuesta.
+  
       $.ajax({
         url: '/procesar_compra',
         method: 'POST',
         data: {
           cash_payment_reference: cashPaymentReference,
-          // Aquí puedes enviar los datos relevantes de la compra, como el método de pago, el producto, etc.
+          //  enviar los datos relevantes de la compra, como el método de pago, el producto, etc.
         },
-        success: function(response) {
+        success: function (response) {
           // Lógica para manejar la respuesta del servidor en caso de éxito
           alert("¡Compra procesada correctamente!");
         },
-        error: function(error) {
+        error: function (error) {
           // Lógica para manejar errores en caso de que la compra no se pueda procesar
           alert("Ocurrió un error al procesar la compra. Por favor, inténtalo nuevamente.");
-        }
+        },
       });
     }
   </script>
