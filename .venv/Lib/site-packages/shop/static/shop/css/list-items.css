@@ -1,0 +1,18 @@
+.shop-list-item {
+  border-color: #dee2e6 !important; }
+  .shop-list-item:hover {
+    background-color: #f8f9fa !important; }
+  .shop-list-item .form-inline div:first-child, .shop-list-item .form-inline div:last-child {
+    width: 7.5rem;
+    text-align: right; }
+  .shop-list-item .form-inline input {
+    width: 4rem; }
+  .shop-list-item .shop-item-control {
+    width: 7.5rem; }
+  .shop-list-item .badge {
+    white-space: normal; }
+
+.shop-double-border {
+  border-top-width: 3px;
+  border-top-style: double;
+  border-top-color: #dee2e6 !important; }

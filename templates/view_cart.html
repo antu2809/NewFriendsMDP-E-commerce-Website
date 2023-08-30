@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Carrito de Compras</h1>
+  
+  {% if cart_items %}
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.product.price }}</td>
+            <td>${{ item.product.price * item.quantity }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>Total a pagar: ${{ total_price }}</p>
+    <form method="post" action="{% url 'payment_view' %}">
+      {% csrf_token %}
+      {{ payment_form }}
+      <input type="submit" value="Realizar Pago">
+    </form>
+  {% else %}
+    <p>No hay productos en el carrito.</p>
+  {% endif %}
+  
+{% endblock %}

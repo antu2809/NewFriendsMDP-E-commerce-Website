@@ -2,8 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views
-from .views import register
+from shoplist import views
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 
@@ -16,6 +15,7 @@ urlpatterns = [
     path('', views.base_view, name='base'),
     path('product_list', views.product_list, name='product_list'),
     path('purchase_product/<int:product_id>', views.purchase_product, name='purchase_product'),
+    path('view_cart', views.view_cart, name='view_cart'),
     path('payment_view/<int:product_id>', views.payment_view, name='payment_view'),
     path('payment_success', views.payment_success, name='payment_success'),
     path('payment_pending', views.payment_pending, name='payment_pending'),
@@ -28,6 +28,5 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('update_profile', views.update_profile, name='update_profile'),
     path('purchase_history', views.purchase_history, name='purchase_history'),
-    path('contact', views.contact, name='contact'),
-    # Agrega aquí más patrones de URL según las necesidades de tu proyecto
+    path('contact', views.contact, name='contact')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

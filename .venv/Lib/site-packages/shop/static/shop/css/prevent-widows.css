@@ -1,0 +1,7 @@
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .shop-catalog-list .shop-list-item:nth-child(n+15):nth-last-child(1) {
+    display: none; } }
+
+@media (min-width: 1200px) {
+  .shop-catalog-list .shop-list-item:nth-child(n+15):nth-last-child(1) {
+    display: none; } }

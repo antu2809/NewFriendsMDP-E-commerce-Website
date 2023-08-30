@@ -210,6 +210,8 @@
             {% if user.is_authenticated %}
               <!-- Usuario autenticado: Mostrar enlace de cierre de sesión -->
               <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
+              <!-- Enlace al carrito -->
+              <li class="nav-item"><a class="nav-link" href="{% url 'view_cart' %}">Carrito</a></li>
             {% else %}
             <!-- Usuario no autenticado: Mostrar enlace de inicio de sesión y registro -->
               <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>

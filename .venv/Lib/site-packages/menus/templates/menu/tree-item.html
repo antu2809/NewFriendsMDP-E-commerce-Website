@@ -1,0 +1,4 @@
+{# Here so it can be overridden #}
+<li class="{% if current_item = item %}active{% endif %}">
+    <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+</li>

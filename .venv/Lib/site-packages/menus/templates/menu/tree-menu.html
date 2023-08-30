@@ -1,0 +1,46 @@
+{% load mptt_tags %}
+
+{# Assumes that 'menu' is the full_tree_for_model                       #}
+
+{# 'current_menu' should be the object that is the currently open menu  #}
+{# 'node.items' should evaluate to an iterable of items that are not    #}
+{#   part of the menu tree structure, but will appear in the menu.      #}
+
+{# If you want a dynamically expanding menu, then you should use CSS    #}
+{# and the currently selected menu item will have the class "active"    #}
+{# all root nodes will have the class 'root', and non-root nodes will   #}
+{# have the class 'child'. Leaf nodes have the class 'leaf', and each   #}
+{# node will also have the class 'open' or 'closed', depending upon if  #}
+{# the active node is in it's descendants or not.                       #}
+
+<nav id="{{ menu_id }}" class="tree-menu">
+    <ul>
+        {% recursetree menu %}
+            <li class="menu
+                {% if node.is_root_node %}root{% endif %}
+                {% if node.is_child_node %}child{% endif %}
+                {% if node.is_leaf_node %}leaf{% endif %}
+                {% if node = current_menu %}active{% endif %}
+                {% if current_menu in node.get_descendants %}open{% else %}closed{% endif %}
+            ">
+                <a href="?{{ menu_name }}={{ node.pk }}">{{ node.name }}</a>
+                {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ children }}
+                    </ul>
+                {% endif %}
+                {% if node.items and node.items.exists %}
+                    <ul class="items">
+                        {% for item in node.items.all %}
+                            {% if item_template %}
+                                {% include item_template %}
+                            {% else %}
+                                {% include "menu/tree-item.html" %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
+</nav>

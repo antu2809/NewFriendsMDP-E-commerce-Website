@@ -1,0 +1,8 @@
+/* taken from Bootstrap-3 until django-angular supports Bootstrap-4 natively */
+.checkbox-inline {
+  position: relative;
+  display: inline; }
+  .checkbox-inline input {
+    margin-right: 0.5rem; }
+  .checkbox-inline p {
+    display: initial; }

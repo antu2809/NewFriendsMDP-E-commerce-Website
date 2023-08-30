@@ -1,0 +1,4 @@
+<a href="{{ url }}" id="{{ element_id }}" class="btn {{ classes }}">
+  {% for icon in icons %}<i class="icon-{{ icon }}"></i>{% endfor %}
+  {{ text|safe }}
+</a>
